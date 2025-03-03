@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Blog</title>
+    <style>
+        /* Page Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 50%;
+            margin: 20px auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px gray;
+            border-radius: 10px;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #005f73;
+        }
+        .post {
+            background: #fff;
+            padding: 10px;
+            margin: 10px 0;
+            box-shadow: 0px 0px 5px gray;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>My Simple Blog</h1>
+        <textarea id="blogPost" placeholder="Write your blog post here..."></textarea>
+        <button onclick="savePost()">Publish</button>
+        <h2>Recent Posts</h2>
+        <div id="posts"></div>
+    </div>
+
+    <script>
+        // Load saved posts from local storage
+        function loadPosts() {
+            let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+            let postsContainer = document.getElementById("posts");
+            postsContainer.innerHTML = "";
+            posts.forEach(post => {
+                let postDiv = document.createElement("div");
+                postDiv.classList.add("post");
+                postDiv.innerHTML = `<p>${post}</p>`;
+                postsContainer.appendChild(postDiv);
+            });
+        }
+
+        // Save a new post
+        function savePost() {
+            let textarea = document.getElementById("blogPost");
+            let postContent = textarea.value.trim();
+            if (postContent === "") {
+                alert("Please write something before publishing.");
+                return;
+            }
+            let posts = JSON.parse(localStorage.getItem("blogPosts")) || [];
+            posts.unshift(postContent); // Add new post to the top
+            localStorage.setItem("blogPosts", JSON.stringify(posts));
+            textarea.value = ""; // Clear textarea
+            loadPosts(); // Refresh posts
+        }
+
+        // Load posts when the page opens
+        loadPosts();
+    </script>
+
+</body>
+</html>
